@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { SessionInterface } from "../session/types"
+
 export interface AuthQuery {
   code: string;
   timestamp: string;
@@ -27,8 +29,30 @@ export interface OnlineAccessInfo {
     collaborator: boolean;
   };
 }
+
 /* eslint-enable @typescript-eslint/naming-convention */
+
+export type AuthConfig = {
+  keys?: string[];
+  myShopifyDomain?: string;
+  accessMode?: "online" | "offline";
+  prefix?: string
+
+  API_KEY: string
+  IS_PRIVATE_APP: boolean
+}
+
+export type AuthResult = {
+  location: string
+  cookie: string
+}
+
+export type AuthValidationResult = {
+  session: SessionInterface
+  cookie: string
+}
 
 export interface OnlineAccessResponse
   extends AccessTokenResponse,
-    OnlineAccessInfo {}
+    OnlineAccessInfo {
+}

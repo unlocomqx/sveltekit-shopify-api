@@ -4,7 +4,6 @@
   "description": "Shopify API Library for Node - accelerate development with support for authentication, graphql proxy, webhooks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "prettier": "@shopify/prettier-config",
   "scripts": {
     "test": "jest --testPathIgnorePatterns=src/rest-resources/__tests__",
     "test_rest_resources": "ls src/rest-resources/__tests__ | xargs -I \"{}\" sh -c 'yarn jest --no-coverage --testPathPattern=\\\"{}\\\" || exit 255'",
@@ -47,6 +46,7 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/node-fetch": "^2.5.7",
     "@types/supertest": "^2.0.10",
+    "cookie": "^0.4.2",
     "cookies": "^0.8.0",
     "jsonwebtoken": "^8.5.1",
     "node-fetch": "^2.6.1",
@@ -56,6 +56,8 @@
   "devDependencies": {
     "@shopify/eslint-plugin": "^41.1.0",
     "@shopify/prettier-config": "^1.1.2",
+    "@sveltejs/kit": "^1.0.0-next.302",
+    "@types/cookie": "^0.4.1",
     "@types/cookies": "^0.7.5",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.1",

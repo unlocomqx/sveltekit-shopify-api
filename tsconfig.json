@@ -9,6 +9,7 @@
     "target": "es5",
     "downlevelIteration": true,
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "sourceMap": false,
     "noEmitOnError": false,
     "experimentalDecorators": true,
@@ -36,5 +37,5 @@
     "rootDir": "src"
   },
   "include": ["./src/**/*.ts", "./src/**/*.tsx"],
-  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/test/*"]
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/test/*", "node_modules/**"]
 }
