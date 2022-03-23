@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { ApiVersion } from "../../base-types"
+import { AuthScopes } from "../scopes"
+import { SessionStorage } from "../session"
 import { SessionInterface } from "../session/types"
 
 export interface AuthQuery {
@@ -37,9 +40,19 @@ export type AuthConfig = {
   myShopifyDomain?: string;
   accessMode?: "online" | "offline";
   prefix?: string
+  afterAuth: (result: AuthValidationResult) => void
 
-  API_KEY: string
-  IS_PRIVATE_APP: boolean
+  API_KEY: string;
+  API_SECRET_KEY: string;
+  SCOPES: string[] | AuthScopes;
+  HOST_NAME: string;
+  API_VERSION: ApiVersion;
+  IS_EMBEDDED_APP: boolean;
+  IS_PRIVATE_APP?: boolean;
+  SESSION_STORAGE?: SessionStorage;
+  LOG_FILE?: string;
+  USER_AGENT_PREFIX?: string;
+  PRIVATE_APP_STOREFRONT_ACCESS_TOKEN?: string;
 }
 
 export type AuthResult = {

@@ -1,8 +1,9 @@
-import http from 'http';
+import { RequestEvent } from "@sveltejs/kit/types/private"
+import { ShopifyOAuth } from "../auth/oauth/oauth"
+import { AuthConfig } from "../auth/oauth/types"
+import { Session } from "../auth/session"
 
-import {Context} from '../context';
-import {ShopifyOAuth} from '../auth/oauth/oauth';
-import {Session} from '../auth/session';
+import { Context } from "../context"
 
 /**
  * Loads the current user's session, based on the given request and response.
@@ -11,21 +12,23 @@ import {Session} from '../auth/session';
  * @param response Current HTTP response
  * @param isOnline Whether to load online (default) or offline sessions (optional)
  */
-export default async function loadCurrentSession(
-  request: http.IncomingMessage,
-  response: http.ServerResponse,
+export default async function loadCurrentSession (
+  event: RequestEvent,
+  config: AuthConfig,
   isOnline = true,
 ): Promise<Session | undefined> {
-  Context.throwIfUninitialized();
+  Context.throwIfUninitialized()
 
   const sessionId = ShopifyOAuth.getCurrentSessionId(
-    request,
-    response,
+    event,
+    config,
     isOnline,
-  );
+  )
   if (!sessionId) {
-    return Promise.resolve(undefined);
+    return Promise.resolve(undefined)
   }
 
-  return Context.SESSION_STORAGE.loadSession(sessionId);
+  return config.SESSION_STORAGE ?
+    config.SESSION_STORAGE.loadSession(sessionId) :
+    undefined
 }

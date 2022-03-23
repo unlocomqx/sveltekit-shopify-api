@@ -5,8 +5,6 @@ import querystring from "querystring"
 import { v4 as uuidv4 } from "uuid"
 import { HttpClient } from "../../clients/http_client/http_client"
 import { DataType } from "../../clients/http_client/types"
-
-import { Context } from "../../context"
 import * as ShopifyErrors from "../../error"
 import decodeSessionToken from "../../utils/decode-session-token"
 import validateHmac from "../../utils/hmac-validator"
@@ -19,7 +17,8 @@ import {
   AccessTokenResponse,
   AuthConfig,
   AuthQuery,
-  AuthResult, AuthValidationResult,
+  AuthResult,
+  AuthValidationResult,
   OnlineAccessInfo,
   OnlineAccessResponse,
 } from "./types"
@@ -58,7 +57,8 @@ const ShopifyOAuth = {
       isOnline,
     )
 
-    const sessionStored = await Context.SESSION_STORAGE.storeSession(session)
+    const sessionStored = config.SESSION_STORAGE &&
+      await config.SESSION_STORAGE.storeSession(session)
 
     if (!sessionStored) {
       throw new ShopifyErrors.SessionStorageError(
@@ -68,9 +68,9 @@ const ShopifyOAuth = {
 
     /* eslint-disable @typescript-eslint/naming-convention */
     const query = {
-      client_id        : Context.API_KEY,
-      scope            : Context.SCOPES.toString(),
-      redirect_uri     : `https://${ Context.HOST_NAME }${ redirectPath }`,
+      client_id        : config.API_KEY,
+      scope            : config.SCOPES.toString(),
+      redirect_uri     : `https://${ config.HOST_NAME }${ redirectPath }`,
       state,
       "grant_options[]": isOnline ? "per-user" : "",
     }
@@ -101,10 +101,12 @@ const ShopifyOAuth = {
    */
   async validateAuthCallback (
     event: RequestEvent,
+    config: AuthConfig,
     query: AuthQuery,
   ): Promise<AuthValidationResult> {
-    Context.throwIfUninitialized()
-    Context.throwIfPrivateApp("Cannot perform OAuth for private apps")
+    if (config.IS_PRIVATE_APP) {
+      throw new Error("Cannot perform OAuth for private apps")
+    }
 
     const cookies = cookie.parse(event.request.headers.get("cookie") || "")
 
@@ -115,9 +117,10 @@ const ShopifyOAuth = {
       )
     }
 
-    let currentSession = await Context.SESSION_STORAGE.loadSession(
-      sessionCookie,
-    )
+    let currentSession = config.SESSION_STORAGE &&
+      await config.SESSION_STORAGE.loadSession(
+        sessionCookie,
+      )
     if (!currentSession) {
       throw new ShopifyErrors.SessionNotFound(
         `Cannot complete OAuth process. No session found for the specified shop url: ${ query.shop }`,
@@ -130,8 +133,8 @@ const ShopifyOAuth = {
 
     /* eslint-disable @typescript-eslint/naming-convention */
     const body = {
-      client_id    : Context.API_KEY,
-      client_secret: Context.API_SECRET_KEY,
+      client_id    : config.API_KEY,
+      client_secret: config.API_SECRET_KEY,
       code         : query.code,
     }
     /* eslint-enable @typescript-eslint/naming-convention */
@@ -157,7 +160,7 @@ const ShopifyOAuth = {
       currentSession.onlineAccessInfo = rest
 
       // For an online session in an embedded app, we no longer want the cookie session so we delete it
-      if (Context.IS_EMBEDDED_APP) {
+      if (config.IS_EMBEDDED_APP) {
         // If this is an online session for an embedded app, replace the online session with a JWT session
         const onlineInfo = currentSession.onlineAccessInfo as OnlineAccessInfo
         const jwtSessionId = this.getJwtSessionId(
@@ -166,9 +169,10 @@ const ShopifyOAuth = {
         )
         const jwtSession = Session.cloneSession(currentSession, jwtSessionId)
 
-        const sessionDeleted = await Context.SESSION_STORAGE.deleteSession(
-          currentSession.id,
-        )
+        const sessionDeleted = config.SESSION_STORAGE &&
+          await config.SESSION_STORAGE.deleteSession(
+            currentSession.id,
+          )
         if (!sessionDeleted) {
           throw new ShopifyErrors.SessionStorageError(
             "OAuth Session could not be deleted. Please check your session storage functionality.",
@@ -183,9 +187,10 @@ const ShopifyOAuth = {
       currentSession.scope = responseBody.scope
     }
 
-    const sessionStored = await Context.SESSION_STORAGE.storeSession(
-      currentSession,
-    )
+    const sessionStored = config.SESSION_STORAGE &&
+      await config.SESSION_STORAGE.storeSession(
+        currentSession,
+      )
     if (!sessionStored) {
       throw new ShopifyErrors.SessionStorageError(
         "OAuth Session could not be saved. Please check your session storage functionality.",
@@ -195,7 +200,7 @@ const ShopifyOAuth = {
     return {
       session: currentSession,
       cookie : cookie.serialize(ShopifyOAuth.SESSION_COOKIE_NAME, currentSession.id, {
-        expires : Context.IS_EMBEDDED_APP ? new Date() : currentSession.expires,
+        expires : config.IS_EMBEDDED_APP ? new Date() : currentSession.expires,
         sameSite: "lax",
         secure  : true,
       })
@@ -241,6 +246,7 @@ const ShopifyOAuth = {
    */
   getCurrentSessionId (
     event: RequestEvent,
+    config: AuthConfig,
     isOnline = true,
   ): string | undefined {
     let currentSessionId: string | undefined
@@ -249,7 +255,7 @@ const ShopifyOAuth = {
 
     let cookies = cookie.parse(request.headers.get("cookie") || "")
 
-    if (Context.IS_EMBEDDED_APP) {
+    if (config.IS_EMBEDDED_APP) {
       const authHeader = request.headers.get("authorization")
       if (authHeader) {
         const matches = authHeader.match(/^Bearer (.+)$/)

@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "module": "ES2015",
     "composite": true,
     "declaration": true,
     "declarationMap": true,
