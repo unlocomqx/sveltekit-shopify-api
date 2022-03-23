@@ -127,7 +127,9 @@ const ShopifyOAuth = {
       )
     }
 
-    if (!validQuery(query, currentSession)) {
+    console.log(currentSession)
+
+    if (!validQuery(config, query, currentSession)) {
       throw new ShopifyErrors.InvalidOAuthError("Invalid OAuth callback.")
     }
 
@@ -293,9 +295,9 @@ const ShopifyOAuth = {
  * @param query Current HTTP Request Query
  * @param session Current session
  */
-function validQuery (query: AuthQuery, session: Session): boolean {
+function validQuery (config: AuthConfig, query: AuthQuery, session: Session): boolean {
   return (
-    validateHmac(query) &&
+    validateHmac(config, query) &&
     validateShop(query.shop) &&
     safeCompare(query.state, session.state as string)
   )

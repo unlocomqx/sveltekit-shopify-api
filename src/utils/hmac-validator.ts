@@ -1,26 +1,25 @@
-import crypto from 'crypto';
-import querystring from 'querystring';
+import crypto from "crypto"
+import querystring from "querystring"
 
-import {AuthQuery} from '../auth/oauth/types';
-import * as ShopifyErrors from '../error';
-import {Context} from '../context';
+import { AuthConfig, AuthQuery } from "../auth/oauth/types"
+import * as ShopifyErrors from "../error"
 
-import safeCompare from './safe-compare';
+import safeCompare from "./safe-compare"
 
-export function stringifyQuery(query: AuthQuery): string {
+export function stringifyQuery (query: AuthQuery): string {
   const orderedObj = Object.keys(query)
     .sort((val1, val2) => val1.localeCompare(val2))
     .reduce(
-      (obj: {[key: string]: string | undefined}, key: keyof AuthQuery) => ({
+      (obj: { [key: string]: string | undefined }, key: keyof AuthQuery) => ({
         ...obj,
         [key]: query[key],
       }),
       {},
-    );
-  return querystring.stringify(orderedObj);
+    )
+  return querystring.stringify(orderedObj)
 }
 
-export function generateLocalHmac({
+export function generateLocalHmac (config: AuthConfig, {
   code,
   timestamp,
   state,
@@ -32,12 +31,12 @@ export function generateLocalHmac({
     timestamp,
     state,
     shop,
-    ...(host && {host}),
-  });
+    ...(host && { host }),
+  })
   return crypto
-    .createHmac('sha256', Context.API_SECRET_KEY)
+    .createHmac("sha256", config.API_SECRET_KEY)
     .update(queryString)
-    .digest('hex');
+    .digest("hex")
 }
 
 /**
@@ -45,14 +44,13 @@ export function generateLocalHmac({
  *
  * @param query HTTP Request Query, containing the information to be validated.
  */
-export default function validateHmac(query: AuthQuery): boolean {
+export default function validateHmac (config: AuthConfig, query: AuthQuery): boolean {
   if (!query.hmac) {
     throw new ShopifyErrors.InvalidHmacError(
-      'Query does not contain an HMAC value.',
-    );
+      "Query does not contain an HMAC value.",
+    )
   }
-  const {hmac} = query;
-  const localHmac = generateLocalHmac(query);
-
-  return safeCompare(hmac as string, localHmac);
+  const { hmac } = query
+  const localHmac = generateLocalHmac(config, query)
+  return safeCompare(hmac as string, localHmac)
 }
