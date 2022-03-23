@@ -189,9 +189,7 @@ const ShopifyOAuth = {
     }
 
     const sessionStored = config.SESSION_STORAGE &&
-      await config.SESSION_STORAGE.storeSession(
-        currentSession,
-      )
+      await config.SESSION_STORAGE.storeSession(currentSession)
     if (!sessionStored) {
       throw new ShopifyErrors.SessionStorageError(
         "OAuth Session could not be saved. Please check your session storage functionality.",
@@ -268,7 +266,7 @@ const ShopifyOAuth = {
           )
         }
 
-        const jwtPayload = decodeSessionToken(matches[1])
+        const jwtPayload = decodeSessionToken(config, matches[1])
         const shop = jwtPayload.dest.replace(/^https:\/\//, "")
         if (isOnline) {
           currentSessionId = this.getJwtSessionId(shop, jwtPayload.sub)

@@ -2,7 +2,6 @@ import { RequestEvent } from "@sveltejs/kit/types/private"
 import { ShopifyOAuth } from "../auth/oauth/oauth"
 import { AuthConfig } from "../auth/oauth/types"
 
-import { Context } from "../context"
 import * as ShopifyErrors from "../error"
 
 /**
@@ -13,12 +12,10 @@ import * as ShopifyErrors from "../error"
  * @param isOnline Whether to load online (default) or offline sessions (optional)
  */
 export default async function deleteCurrentSession (
-  event: RequestEvent,
   config: AuthConfig,
+  event: RequestEvent,
   isOnline = true,
 ): Promise<boolean | never> {
-  Context.throwIfUninitialized()
-
   const sessionId = ShopifyOAuth.getCurrentSessionId(
     event,
     config,

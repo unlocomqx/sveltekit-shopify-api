@@ -1,11 +1,11 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken"
+import { AuthConfig } from "../auth/oauth/types"
 
-import {Context} from '../context';
-import * as ShopifyErrors from '../error';
+import * as ShopifyErrors from "../error"
 
-import validateShop from './shop-validator';
+import validateShop from "./shop-validator"
 
-const JWT_PERMITTED_CLOCK_TOLERANCE = 5;
+const JWT_PERMITTED_CLOCK_TOLERANCE = 5
 
 interface JwtPayload {
   iss: string;
@@ -24,34 +24,34 @@ interface JwtPayload {
  *
  * @param token Received session token
  */
-function decodeSessionToken(token: string): JwtPayload {
-  let payload: JwtPayload;
+function decodeSessionToken (config: AuthConfig, token: string): JwtPayload {
+  let payload: JwtPayload
   try {
-    payload = jwt.verify(token, Context.API_SECRET_KEY, {
-      algorithms: ['HS256'],
+    payload = jwt.verify(token, config.API_SECRET_KEY, {
+      algorithms    : ["HS256"],
       clockTolerance: JWT_PERMITTED_CLOCK_TOLERANCE,
-    }) as JwtPayload;
+    }) as JwtPayload
   } catch (error) {
     throw new ShopifyErrors.InvalidJwtError(
-      `Failed to parse session token '${token}': ${error.message}`,
-    );
+      `Failed to parse session token '${ token }': ${ error.message }`,
+    )
   }
 
   // The exp and nbf fields are validated by the JWT library
 
-  if (payload.aud !== Context.API_KEY) {
+  if (payload.aud !== config.API_KEY) {
     throw new ShopifyErrors.InvalidJwtError(
-      'Session token had invalid API key',
-    );
+      "Session token had invalid API key",
+    )
   }
 
-  if (!validateShop(payload.dest.replace(/^https:\/\//, ''))) {
-    throw new ShopifyErrors.InvalidJwtError('Session token had invalid shop');
+  if (!validateShop(payload.dest.replace(/^https:\/\//, ""))) {
+    throw new ShopifyErrors.InvalidJwtError("Session token had invalid shop")
   }
 
-  return payload;
+  return payload
 }
 
-export default decodeSessionToken;
+export default decodeSessionToken
 
-export {decodeSessionToken, JwtPayload};
+export { decodeSessionToken, JwtPayload }

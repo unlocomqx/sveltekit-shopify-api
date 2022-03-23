@@ -3,8 +3,6 @@ import { ShopifyOAuth } from "../auth/oauth/oauth"
 import { AuthConfig } from "../auth/oauth/types"
 import { Session } from "../auth/session"
 
-import { Context } from "../context"
-
 /**
  * Loads the current user's session, based on the given request and response.
  *
@@ -13,12 +11,10 @@ import { Context } from "../context"
  * @param isOnline Whether to load online (default) or offline sessions (optional)
  */
 export default async function loadCurrentSession (
-  event: RequestEvent,
   config: AuthConfig,
+  event: RequestEvent,
   isOnline = true,
 ): Promise<Session | undefined> {
-  Context.throwIfUninitialized()
-
   const sessionId = ShopifyOAuth.getCurrentSessionId(
     event,
     config,
