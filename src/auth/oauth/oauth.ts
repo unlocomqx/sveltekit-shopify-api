@@ -81,6 +81,7 @@ const ShopifyOAuth = {
     return {
       location: `https://${ shop }/admin/oauth/authorize?${ queryString }`,
       cookie  : cookie.serialize(ShopifyOAuth.SESSION_COOKIE_NAME, session.id, {
+        path    : "/",
         expires : new Date(Date.now() + 60000),
         sameSite: "lax",
         secure  : true,
@@ -126,8 +127,6 @@ const ShopifyOAuth = {
         `Cannot complete OAuth process. No session found for the specified shop url: ${ query.shop }`,
       )
     }
-
-    console.log(currentSession)
 
     if (!validQuery(config, query, currentSession)) {
       throw new ShopifyErrors.InvalidOAuthError("Invalid OAuth callback.")
@@ -201,7 +200,9 @@ const ShopifyOAuth = {
 
     return {
       session: currentSession,
+      host   : query.host,
       cookie : cookie.serialize(ShopifyOAuth.SESSION_COOKIE_NAME, currentSession.id, {
+        path    : "/",
         expires : config.IS_EMBEDDED_APP ? new Date() : currentSession.expires,
         sameSite: "lax",
         secure  : true,

@@ -62,6 +62,7 @@ export type AuthResult = {
 
 export type AuthValidationResult = {
   session: SessionInterface
+  host: string | undefined
   cookie: string
 }
 
