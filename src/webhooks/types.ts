@@ -1,7 +1,7 @@
 export enum DeliveryMethod {
-  Http = 'http',
-  EventBridge = 'eventbridge',
-  PubSub = 'pubsub',
+  Http = "http",
+  EventBridge = "eventbridge",
+  PubSub = "pubsub",
 }
 
 type WebhookHandlerFunction = (
@@ -38,24 +38,23 @@ export interface WebhookRegistryEntry {
   webhookHandler: WebhookHandlerFunction;
 }
 
-interface WebhookCheckResponseNode<
-  T = {
-    endpoint:
-      | {
-          __typename: 'WebhookHttpEndpoint';
-          callbackUrl: string;
-        }
-      | {
-          __typename: 'WebhookEventBridgeEndpoint';
-          arn: string;
-        }
-      | {
-          __typename: 'WebhookPubSubEndpoint';
-          pubSubProject: string;
-          pubSubTopic: string;
-        };
-  },
-> {
+interface WebhookCheckResponseNode<T = {
+  endpoint:
+    | {
+    __typename: "WebhookHttpEndpoint";
+    callbackUrl: string;
+  }
+    | {
+    __typename: "WebhookEventBridgeEndpoint";
+    arn: string;
+  }
+    | {
+    __typename: "WebhookPubSubEndpoint";
+    pubSubProject: string;
+    pubSubTopic: string;
+  };
+},
+  > {
   node: {
     id: string;
   } & T;

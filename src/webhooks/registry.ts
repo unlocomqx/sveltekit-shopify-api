@@ -73,6 +73,7 @@ interface RegistryInterface {
    * @param response HTTP response to the request
    */
   process (
+    config: AuthConfig,
     event: RequestEvent
   ): Promise<Response>;
 
@@ -314,14 +315,15 @@ const WebhooksRegistry: RegistryInterface = {
   },
 
   async process (
+    config: AuthConfig,
     event: RequestEvent
   ): Promise<Response> {
     const { request } = event
 
-    const jsonBody = await event.request.json()
-    console.log(jsonBody)
+    const body = await event.request.text()
+
     const promise: Promise<Response> = new Promise(async (resolve, reject) => {
-      if (!jsonBody.length) {
+      if (!body) {
         return reject(
           new ShopifyErrors.InvalidWebhookError(
             "No body was received when processing webhook",
@@ -357,8 +359,8 @@ const WebhooksRegistry: RegistryInterface = {
 
       let responseError: Error | undefined
 
-      const generatedHash = createHmac("sha256", Context.API_SECRET_KEY)
-        .update(jsonBody, "utf8")
+      const generatedHash = createHmac("sha256", config.API_SECRET_KEY)
+        .update(body, "utf8")
         .digest("base64")
 
       if (ShopifyUtilities.safeCompare(generatedHash, hmac as string)) {
@@ -372,7 +374,7 @@ const WebhooksRegistry: RegistryInterface = {
             await webhookEntry.webhookHandler(
               graphqlTopic,
               domain as string,
-              jsonBody,
+              body,
             )
           } catch (error) {
             responseError = error
