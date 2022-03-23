@@ -38,7 +38,7 @@ export interface OnlineAccessInfo {
 export type AuthConfig = {
   keys?: string[];
   myShopifyDomain?: string;
-  accessMode?: "online" | "offline";
+  accessMode?: AccessMode;
   prefix?: string
   afterAuth: (result: AuthValidationResult) => void
 
@@ -53,6 +53,11 @@ export type AuthConfig = {
   LOG_FILE?: string;
   USER_AGENT_PREFIX?: string;
   PRIVATE_APP_STOREFRONT_ACCESS_TOKEN?: string;
+}
+
+export enum AccessMode {
+  ONLINE = "online",
+  OFFLINE = "offline",
 }
 
 export type AuthResult = {
