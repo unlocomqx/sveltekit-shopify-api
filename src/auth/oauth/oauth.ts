@@ -1,13 +1,14 @@
 import { RequestEvent } from "@sveltejs/kit/types/private"
 import cookie from "cookie"
-import querystring from "querystring"
 
+import crypto from "crypto"
+import querystring from "querystring"
 import { v4 as uuidv4 } from "uuid"
 import { HttpClient } from "../../clients/http_client/http_client"
 import { DataType } from "../../clients/http_client/types"
 import * as ShopifyErrors from "../../error"
 import decodeSessionToken from "../../utils/decode-session-token"
-import validateHmac from "../../utils/hmac-validator"
+import validateHmac, { stringifyQuery } from "../../utils/hmac-validator"
 import nonce from "../../utils/nonce"
 import safeCompare from "../../utils/safe-compare"
 import validateShop from "../../utils/shop-validator"
@@ -206,6 +207,37 @@ const ShopifyOAuth = {
         secure  : true,
       })
     }
+  },
+
+  /**
+   * Validates the received callback query.
+   * If valid, will make the subsequent request to update the current session with the appropriate access token.
+   * Throws errors for missing sessions and invalid callbacks.
+   *
+   * @param request Current HTTP Request
+   * @param response Current HTTP Response
+   * @param query Current HTTP Request Query, containing the information to be validated.
+   *              Depending on framework, this may need to be cast as "unknown" before being passed.
+   * @returns SessionInterface
+   */
+  async validateHmac (
+    config: AuthConfig,
+    event: RequestEvent,
+  ): Promise<boolean> {
+    const { url } = event
+    const hmac = url.searchParams.get("hmac") || ""
+
+    const query = Object.fromEntries(url.searchParams)
+    delete query.hmac
+
+    const queryString = stringifyQuery(query as any)
+
+    const local_hmac = crypto
+      .createHmac("sha256", config.API_SECRET_KEY)
+      .update(queryString)
+      .digest("hex")
+
+    return safeCompare(hmac, local_hmac)
   },
 
   /**
