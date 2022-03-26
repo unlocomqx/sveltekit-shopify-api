@@ -1,9 +1,9 @@
-import ShopifyAuth from "./auth/oauth"
-import ShopifySession from "./auth/session"
-import ShopifyClients from "./clients"
+import ShopifyAuth from "./auth/oauth/index"
+import ShopifySession from "./auth/session/index"
+import ShopifyClients from "./clients/index"
 import * as ShopifyErrors from "./error"
-import ShopifyUtils from "./utils"
-import ShopifyWebhooks from "./webhooks"
+import ShopifyUtils from "./utils/index"
+import ShopifyWebhooks from "./webhooks/index"
 
 export const Shopify = {
   Auth    : ShopifyAuth,
