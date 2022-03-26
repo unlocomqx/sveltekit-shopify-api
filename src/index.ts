@@ -14,4 +14,4 @@ export const Shopify = {
   Errors  : ShopifyErrors,
 }
 
-export * from "./types"
+export * from "./types.js"
