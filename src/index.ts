@@ -1,13 +1,11 @@
-import { Context } from "./context"
-import * as ShopifyErrors from "./error"
 import ShopifyAuth from "./auth/oauth"
 import ShopifySession from "./auth/session"
 import ShopifyClients from "./clients"
+import * as ShopifyErrors from "./error"
 import ShopifyUtils from "./utils"
 import ShopifyWebhooks from "./webhooks"
 
 export const Shopify = {
-  Context,
   Auth    : ShopifyAuth,
   Session : ShopifySession,
   Clients : ShopifyClients,

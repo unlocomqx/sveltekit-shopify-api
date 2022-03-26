@@ -112,19 +112,19 @@ function isSuccess (
   )
 }
 
-function versionSupportsPubSub () {
-  return ShopifyUtilities.versionCompatible(ApiVersion.July21)
+function versionSupportsPubSub (config: AuthConfig) {
+  return ShopifyUtilities.versionCompatible(ApiVersion.July21, config.API_VERSION)
 }
 
-function validateDeliveryMethod (deliveryMethod: DeliveryMethod) {
-  if (deliveryMethod === DeliveryMethod.PubSub && !versionSupportsPubSub()) {
+function validateDeliveryMethod (config: AuthConfig, deliveryMethod: DeliveryMethod) {
+  if (deliveryMethod === DeliveryMethod.PubSub && !versionSupportsPubSub(config)) {
     throw new ShopifyErrors.UnsupportedClientType(
       `Pub/Sub webhooks are not supported in API version "${ Context.API_VERSION }".`,
     )
   }
 }
 
-function buildCheckQuery (topic: string): string {
+function buildCheckQuery (config: AuthConfig, topic: string): string {
   return `{
     webhookSubscriptions(first: 1, topics: ${ topic }) {
       edges {
@@ -139,7 +139,7 @@ function buildCheckQuery (topic: string): string {
               arn
             }
             ${
-    versionSupportsPubSub()
+    versionSupportsPubSub(config)
       ? "... on WebhookPubSubEndpoint { \
                     pubSubProject \
                     pubSubTopic \
@@ -154,12 +154,13 @@ function buildCheckQuery (topic: string): string {
 }
 
 function buildQuery (
+  config: AuthConfig,
   topic: string,
   address: string,
   deliveryMethod: DeliveryMethod = DeliveryMethod.Http,
   webhookId?: string,
 ): string {
-  validateDeliveryMethod(deliveryMethod)
+  validateDeliveryMethod(config, deliveryMethod)
   let identifier: string
   if (webhookId) {
     identifier = `id: "${ webhookId }"`
@@ -245,14 +246,14 @@ const WebhooksRegistry: RegistryInterface = {
     deliveryMethod = DeliveryMethod.Http,
   }: RegisterOptions): Promise<RegisterReturn> {
     const registerReturn: RegisterReturn = {}
-    validateDeliveryMethod(deliveryMethod)
+    validateDeliveryMethod(config, deliveryMethod)
     const client = new GraphqlClient(shop, accessToken)
     const address =
       deliveryMethod === DeliveryMethod.Http
         ? `https://${ config.HOST_NAME }${ path }`
         : path
-    const checkResult = (await client.query({
-      data: buildCheckQuery(topic),
+    const checkResult = (await client.query(config, {
+      data: buildCheckQuery(config, topic),
     })) as { body: WebhookCheckResponse }
     let webhookId: string | undefined
     let mustRegister = true
@@ -272,8 +273,8 @@ const WebhooksRegistry: RegistryInterface = {
     }
 
     if (mustRegister) {
-      const result = await client.query({
-        data: buildQuery(topic, address, deliveryMethod, webhookId),
+      const result = await client.query(config, {
+        data: buildQuery(config, topic, address, deliveryMethod, webhookId),
       })
       registerReturn[topic] = {
         success: isSuccess(result.body, deliveryMethod, webhookId),

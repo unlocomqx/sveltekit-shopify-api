@@ -1,17 +1,17 @@
-import {Context} from '../../context';
-import {ShopifyHeader} from '../../base-types';
+import { AuthConfig } from "../../auth/oauth/types"
+import { ShopifyHeader } from "../../base-types"
 
-import {GraphqlClient, AccessTokenHeader} from './graphql_client';
+import { AccessTokenHeader, GraphqlClient } from "./graphql_client"
 
 export class StorefrontClient extends GraphqlClient {
-  protected baseApiPath = '/api';
+  protected baseApiPath = "/api"
 
-  protected getAccessTokenHeader(): AccessTokenHeader {
+  protected getAccessTokenHeader (config: AuthConfig): AccessTokenHeader {
     return {
       header: ShopifyHeader.StorefrontAccessToken,
-      value: (Context.IS_PRIVATE_APP
-        ? Context.PRIVATE_APP_STOREFRONT_ACCESS_TOKEN || this.accessToken
+      value : (config.IS_PRIVATE_APP
+        ? config.PRIVATE_APP_STOREFRONT_ACCESS_TOKEN || this.accessToken
         : this.accessToken) as string,
-    };
+    }
   }
 }

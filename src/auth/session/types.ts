@@ -1,4 +1,4 @@
-import {OnlineAccessInfo} from '../oauth/types';
+import { AuthConfig, OnlineAccessInfo } from "../oauth/types"
 
 export interface SessionInterface {
   readonly id: string;
@@ -9,5 +9,5 @@ export interface SessionInterface {
   expires?: Date;
   accessToken?: string;
   onlineAccessInfo?: OnlineAccessInfo;
-  isActive(): boolean;
+  isActive (config: AuthConfig): boolean;
 }

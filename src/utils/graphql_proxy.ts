@@ -31,6 +31,6 @@ export default async function graphqlProxy (
   }
   const client = new GraphqlClient(shopName, token)
 
-  const response = await client.query(options)
+  const response = await client.query(config, options)
   return new Response(JSON.stringify(response.body))
 }
