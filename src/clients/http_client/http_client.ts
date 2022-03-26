@@ -19,7 +19,7 @@ import {
   PutRequestParams,
   RequestParams,
   RequestReturn,
-} from "./types"
+} from "./types.js"
 
 class HttpClient {
   // 1 second
