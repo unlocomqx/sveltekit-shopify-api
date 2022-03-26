@@ -247,7 +247,7 @@ const WebhooksRegistry: RegistryInterface = {
   }: RegisterOptions): Promise<RegisterReturn> {
     const registerReturn: RegisterReturn = {}
     validateDeliveryMethod(config, deliveryMethod)
-    const client = new GraphqlClient(shop, accessToken)
+    const client = new GraphqlClient(config, shop, accessToken)
     const address =
       deliveryMethod === DeliveryMethod.Http
         ? `https://${ config.HOST_NAME }${ path }`
