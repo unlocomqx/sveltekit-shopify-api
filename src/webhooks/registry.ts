@@ -5,7 +5,6 @@ import { AuthConfig } from "../auth/oauth/types"
 import { ApiVersion, ShopifyHeader } from "../base-types"
 
 import { GraphqlClient } from "../clients/graphql/graphql_client"
-import { Context } from "../context"
 import * as ShopifyErrors from "../error"
 import ShopifyUtilities from "../utils"
 
@@ -119,7 +118,7 @@ function versionSupportsPubSub (config: AuthConfig) {
 function validateDeliveryMethod (config: AuthConfig, deliveryMethod: DeliveryMethod) {
   if (deliveryMethod === DeliveryMethod.PubSub && !versionSupportsPubSub(config)) {
     throw new ShopifyErrors.UnsupportedClientType(
-      `Pub/Sub webhooks are not supported in API version "${ Context.API_VERSION }".`,
+      `Pub/Sub webhooks are not supported in API version "${ config.API_VERSION }".`,
     )
   }
 }
