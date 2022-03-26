@@ -1,13 +1,13 @@
-import {Session} from './session';
-import {SessionStorage} from './session_storage';
-import {MemorySessionStorage} from './storage/memory';
-import {CustomSessionStorage} from './storage/custom';
+import { Session } from "./session.js"
+import { SessionStorage } from "./session_storage.js"
+import { CustomSessionStorage } from "./storage/custom.js"
+import { MemorySessionStorage } from "./storage/memory.js"
 
 const ShopifySession = {
   Session,
   MemorySessionStorage,
   CustomSessionStorage,
-};
+}
 
-export default ShopifySession;
-export {Session, SessionStorage, MemorySessionStorage, CustomSessionStorage};
+export default ShopifySession
+export { Session, SessionStorage, MemorySessionStorage, CustomSessionStorage }

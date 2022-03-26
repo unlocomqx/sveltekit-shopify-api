@@ -1,80 +1,80 @@
-import {Session} from '../session';
-import {SessionInterface} from '../types';
-import {SessionStorage} from '../session_storage';
-import * as ShopifyErrors from '../../../error';
+import * as ShopifyErrors from "../../../error.js"
+import { Session } from "../session.js"
+import { SessionStorage } from "../session_storage.js"
+import { SessionInterface } from "../types.js"
 
 export class CustomSessionStorage implements SessionStorage {
-  constructor(
+  constructor (
     readonly storeCallback: (session: SessionInterface) => Promise<boolean>,
     readonly loadCallback: (
       id: string,
-    ) => Promise<SessionInterface | {[key: string]: unknown} | undefined>,
+    ) => Promise<SessionInterface | { [key: string]: unknown } | undefined>,
     readonly deleteCallback: (id: string) => Promise<boolean>,
   ) {
-    this.storeCallback = storeCallback;
-    this.loadCallback = loadCallback;
-    this.deleteCallback = deleteCallback;
+    this.storeCallback = storeCallback
+    this.loadCallback = loadCallback
+    this.deleteCallback = deleteCallback
   }
 
-  public async storeSession(session: SessionInterface): Promise<boolean> {
+  public async storeSession (session: SessionInterface): Promise<boolean> {
     try {
-      return await this.storeCallback(session);
+      return await this.storeCallback(session)
     } catch (error) {
       throw new ShopifyErrors.SessionStorageError(
-        `CustomSessionStorage failed to store a session. Error Details: ${error}`,
-      );
+        `CustomSessionStorage failed to store a session. Error Details: ${ error }`,
+      )
     }
   }
 
-  public async loadSession(id: string): Promise<SessionInterface | undefined> {
-    let result: SessionInterface | {[key: string]: unknown} | undefined;
+  public async loadSession (id: string): Promise<SessionInterface | undefined> {
+    let result: SessionInterface | { [key: string]: unknown } | undefined
     try {
-      result = await this.loadCallback(id);
+      result = await this.loadCallback(id)
     } catch (error) {
       throw new ShopifyErrors.SessionStorageError(
-        `CustomSessionStorage failed to load a session. Error Details: ${error}`,
-      );
+        `CustomSessionStorage failed to load a session. Error Details: ${ error }`,
+      )
     }
     if (result) {
       if (result instanceof Session) {
-        if (result.expires && typeof result.expires === 'string') {
-          result.expires = new Date(result.expires);
+        if (result.expires && typeof result.expires === "string") {
+          result.expires = new Date(result.expires)
         }
 
-        return result as SessionInterface;
-      } else if (result instanceof Object && 'id' in result) {
+        return result as SessionInterface
+      } else if (result instanceof Object && "id" in result) {
         let session = new Session(
           result.id as string,
           result.shop as string,
           result.state as string,
           result.isOnline as boolean,
-        );
-        session = {...session, ...(result as SessionInterface)};
+        )
+        session = { ...session, ...(result as SessionInterface) }
 
-        if (session.expires && typeof session.expires === 'string') {
-          session.expires = new Date(session.expires);
+        if (session.expires && typeof session.expires === "string") {
+          session.expires = new Date(session.expires)
         }
 
-        return session as SessionInterface;
+        return session as SessionInterface
       } else {
         throw new ShopifyErrors.SessionStorageError(
           `Expected return to be instanceof Session, but received instanceof ${
             result!.constructor.name
           }.`,
-        );
+        )
       }
     } else {
-      return undefined;
+      return undefined
     }
   }
 
-  public async deleteSession(id: string): Promise<boolean> {
+  public async deleteSession (id: string): Promise<boolean> {
     try {
-      return await this.deleteCallback(id);
+      return await this.deleteCallback(id)
     } catch (error) {
       throw new ShopifyErrors.SessionStorageError(
-        `CustomSessionStorage failed to delete a session. Error Details: ${error}`,
-      );
+        `CustomSessionStorage failed to delete a session. Error Details: ${ error }`,
+      )
     }
   }
 }
