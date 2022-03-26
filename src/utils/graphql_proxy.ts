@@ -1,10 +1,10 @@
 import { RequestEvent } from "@sveltejs/kit/types/private"
-import { AuthConfig } from "../auth/oauth/types"
+import { AuthConfig } from "../auth/oauth/types.js"
 
-import { GraphqlClient } from "../clients/graphql"
-import * as ShopifyErrors from "../error"
+import { GraphqlClient } from "../clients/graphql/index.js"
+import * as ShopifyErrors from "../error.js"
 
-import loadCurrentSession from "./load-current-session"
+import loadCurrentSession from "./load-current-session.js"
 
 export default async function graphqlProxy (
   config: AuthConfig,

@@ -1,3 +1,3 @@
-import {RestClient} from './rest_client';
+import { RestClient } from "./rest_client.js"
 
-export {RestClient};
+export { RestClient }

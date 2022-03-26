@@ -1,7 +1,7 @@
 import { RequestEvent } from "@sveltejs/kit/types/private"
-import { ShopifyOAuth } from "../auth/oauth/oauth"
-import { AuthConfig } from "../auth/oauth/types"
-import { Session } from "../auth/session"
+import { ShopifyOAuth } from "../auth/oauth/oauth.js"
+import { AuthConfig } from "../auth/oauth/types.js"
+import { Session } from "../auth/session/index.js"
 
 /**
  * Loads the current user's session, based on the given request and response.

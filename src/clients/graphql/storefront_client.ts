@@ -1,7 +1,7 @@
-import { AuthConfig } from "../../auth/oauth/types"
-import { ShopifyHeader } from "../../base-types"
+import { AuthConfig } from "../../auth/oauth/types.js"
+import { ShopifyHeader } from "../../base-types.js"
 
-import { AccessTokenHeader, GraphqlClient } from "./graphql_client"
+import { AccessTokenHeader, GraphqlClient } from "./graphql_client.js"
 
 export class StorefrontClient extends GraphqlClient {
   protected baseApiPath = "/api"

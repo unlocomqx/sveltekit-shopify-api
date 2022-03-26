@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { ApiVersion } from "../../base-types"
-import { AuthScopes } from "../scopes"
-import { SessionStorage } from "../session"
-import { SessionInterface } from "../session/types"
+import { ApiVersion } from "../../base-types.js"
+import { AuthScopes } from "../scopes/index.js"
+import { SessionStorage } from "../session/index.js"
+import { SessionInterface } from "../session/types.js"
 
 export interface AuthQuery {
   code: string;

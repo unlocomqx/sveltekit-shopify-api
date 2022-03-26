@@ -1,5 +1,5 @@
-import {AuthScopes} from './auth/scopes';
-import {SessionStorage} from './auth/session/session_storage';
+import { AuthScopes } from "./auth/scopes/index.js"
+import { SessionStorage } from "./auth/session/session_storage.js"
 
 export interface ContextParams {
   API_KEY: string;
@@ -16,18 +16,18 @@ export interface ContextParams {
 }
 
 export enum ApiVersion {
-  April21 = '2021-04',
-  July21 = '2021-07',
-  October21 = '2021-10',
-  January22 = '2022-01',
-  April22 = '2022-04',
-  Unstable = 'unstable',
+  April21 = "2021-04",
+  July21 = "2021-07",
+  October21 = "2021-10",
+  January22 = "2022-01",
+  April22 = "2022-04",
+  Unstable = "unstable",
 }
 
 export enum ShopifyHeader {
-  AccessToken = 'X-Shopify-Access-Token',
-  StorefrontAccessToken = 'X-Shopify-Storefront-Access-Token',
-  Hmac = 'X-Shopify-Hmac-Sha256',
-  Topic = 'X-Shopify-Topic',
-  Domain = 'X-Shopify-Shop-Domain',
+  AccessToken = "X-Shopify-Access-Token",
+  StorefrontAccessToken = "X-Shopify-Storefront-Access-Token",
+  Hmac = "X-Shopify-Hmac-Sha256",
+  Topic = "X-Shopify-Topic",
+  Domain = "X-Shopify-Shop-Domain",
 }

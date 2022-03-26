@@ -1,4 +1,4 @@
-import {RequestReturn, GetRequestParams} from '../http_client/types';
+import { GetRequestParams, RequestReturn } from "../http_client/types.js"
 
 export interface PageInfo {
   limit: string;

@@ -1,12 +1,12 @@
 import { StatusCode } from "@shopify/network"
 import { RequestEvent } from "@sveltejs/kit/types/private"
 import { createHmac } from "crypto"
-import { AuthConfig } from "../auth/oauth/types"
-import { ApiVersion, ShopifyHeader } from "../base-types"
+import { AuthConfig } from "../auth/oauth/types.js"
+import { ApiVersion, ShopifyHeader } from "../base-types.js"
 
-import { GraphqlClient } from "../clients/graphql/graphql_client"
-import * as ShopifyErrors from "../error"
-import ShopifyUtilities from "../utils"
+import { GraphqlClient } from "../clients/graphql/graphql_client.js"
+import * as ShopifyErrors from "../error.js"
+import ShopifyUtilities from "../utils/index.js"
 
 import {
   DeliveryMethod,
@@ -15,7 +15,7 @@ import {
   ShortenedRegisterOptions,
   WebhookCheckResponse,
   WebhookRegistryEntry,
-} from "./types"
+} from "./types.js"
 
 interface AddHandlersProps {
   [topic: string]: WebhookRegistryEntry;

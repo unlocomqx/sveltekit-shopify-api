@@ -1,11 +1,11 @@
-import { AuthConfig } from "../../auth/oauth/types"
-import { ShopifyHeader } from "../../base-types"
-import * as ShopifyErrors from "../../error"
-import { MissingRequiredArgument } from "../../error"
-import { HttpClient } from "../http_client/http_client"
-import { DataType, RequestReturn } from "../http_client/types"
+import { AuthConfig } from "../../auth/oauth/types.js"
+import { ShopifyHeader } from "../../base-types.js"
+import * as ShopifyErrors from "../../error.js"
+import { MissingRequiredArgument } from "../../error.js"
+import { HttpClient } from "../http_client/http_client.js"
+import { DataType, RequestReturn } from "../http_client/types.js"
 
-import { GraphqlParams } from "./types"
+import { GraphqlParams } from "./types.js"
 
 export interface AccessTokenHeader {
   header: string;

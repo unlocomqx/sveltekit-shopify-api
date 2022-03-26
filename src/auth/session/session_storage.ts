@@ -1,4 +1,4 @@
-import { SessionInterface } from "./types"
+import { SessionInterface } from "./types.js"
 
 /**
  * Defines the strategy to be used to store sessions for the Shopify App.

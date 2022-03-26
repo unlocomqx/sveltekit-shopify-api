@@ -1,11 +1,11 @@
-import http from 'http';
+import http from "http"
 
-import {Session} from '../auth/session';
-import {GraphqlClient} from '../clients/graphql';
-import {RestClient} from '../clients/rest';
+import { Session } from "../auth/session/index.js"
+import { GraphqlClient } from "../clients/graphql/index.js"
+import { RestClient } from "../clients/rest/index.js"
 
 export interface WithSessionParams {
-  clientType: 'rest' | 'graphql';
+  clientType: "rest" | "graphql";
   isOnline: boolean;
   req?: http.IncomingMessage;
   res?: http.ServerResponse;

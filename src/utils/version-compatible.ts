@@ -1,4 +1,4 @@
-import { ApiVersion } from "../base-types"
+import { ApiVersion } from "../base-types.js"
 
 /**
  * Check if the current or optionally supplied version is compatible with a given version

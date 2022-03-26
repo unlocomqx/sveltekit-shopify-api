@@ -1,12 +1,12 @@
 import querystring from "querystring"
-import { ShopifyHeader } from "../../base-types"
+import { ShopifyHeader } from "../../base-types.js"
 
-import { Context } from "../../context"
-import * as ShopifyErrors from "../../error"
-import { HttpClient } from "../http_client/http_client"
-import { GetRequestParams, RequestParams } from "../http_client/types"
+import { Context } from "../../context.js"
+import * as ShopifyErrors from "../../error.js"
+import { HttpClient } from "../http_client/http_client.js"
+import { GetRequestParams, RequestParams } from "../http_client/types.js"
 
-import { PageInfo, RestRequestReturn } from "./types"
+import { PageInfo, RestRequestReturn } from "./types.js"
 
 class RestClient extends HttpClient {
   private static LINK_HEADER_REGEXP = /<([^<]+)>; rel="([^"]+)"/

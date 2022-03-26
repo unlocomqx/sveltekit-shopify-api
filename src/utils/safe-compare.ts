@@ -1,6 +1,6 @@
-import crypto from 'crypto';
+import crypto from "crypto"
 
-import * as ShopifyErrors from '../error';
+import * as ShopifyErrors from "../error.js"
 
 /**
  * A timing safe string comparison utility.
@@ -8,29 +8,29 @@ import * as ShopifyErrors from '../error';
  * @param strA any string, array of strings, or object with string values
  * @param strB any string, array of strings, or object with string values
  */
-export default function safeCompare(
-  strA: string | {[key: string]: string} | string[] | number[],
-  strB: string | {[key: string]: string} | string[] | number[],
+export default function safeCompare (
+  strA: string | { [key: string]: string } | string[] | number[],
+  strB: string | { [key: string]: string } | string[] | number[],
 ): boolean {
   if (typeof strA === typeof strB) {
-    let buffA: Buffer;
-    let buffB: Buffer;
+    let buffA: Buffer
+    let buffB: Buffer
 
-    if (typeof strA === 'object' && typeof strB === 'object') {
-      buffA = Buffer.from(JSON.stringify(strA));
-      buffB = Buffer.from(JSON.stringify(strB));
+    if (typeof strA === "object" && typeof strB === "object") {
+      buffA = Buffer.from(JSON.stringify(strA))
+      buffB = Buffer.from(JSON.stringify(strB))
     } else {
-      buffA = Buffer.from(strA);
-      buffB = Buffer.from(strB);
+      buffA = Buffer.from(strA)
+      buffB = Buffer.from(strB)
     }
 
     if (buffA.length === buffB.length) {
-      return crypto.timingSafeEqual(buffA, buffB);
+      return crypto.timingSafeEqual(buffA, buffB)
     }
   } else {
     throw new ShopifyErrors.SafeCompareError(
-      `Mismatched data types provided: ${typeof strA} and ${typeof strB}`,
-    );
+      `Mismatched data types provided: ${ typeof strA } and ${ typeof strB }`,
+    )
   }
-  return false;
+  return false
 }

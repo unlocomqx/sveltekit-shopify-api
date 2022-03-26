@@ -1,4 +1,4 @@
-import {ShopifyOAuth} from './oauth';
+import { ShopifyOAuth } from "./oauth.js"
 
-export default ShopifyOAuth;
-export {ShopifyOAuth};
+export default ShopifyOAuth
+export { ShopifyOAuth }

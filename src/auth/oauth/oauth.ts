@@ -4,15 +4,15 @@ import cookie from "cookie"
 import crypto from "crypto"
 import querystring from "querystring"
 import { v4 as uuidv4 } from "uuid"
-import { HttpClient } from "../../clients/http_client/http_client"
-import { DataType } from "../../clients/http_client/types"
-import * as ShopifyErrors from "../../error"
-import decodeSessionToken from "../../utils/decode-session-token"
-import validateHmac, { stringifyQuery } from "../../utils/hmac-validator"
-import nonce from "../../utils/nonce"
-import safeCompare from "../../utils/safe-compare"
-import validateShop from "../../utils/shop-validator"
-import { Session } from "../session"
+import { HttpClient } from "../../clients/http_client/http_client.js"
+import { DataType } from "../../clients/http_client/types.js"
+import * as ShopifyErrors from "../../error.js"
+import decodeSessionToken from "../../utils/decode-session-token.js"
+import validateHmac, { stringifyQuery } from "../../utils/hmac-validator.js"
+import nonce from "../../utils/nonce.js"
+import safeCompare from "../../utils/safe-compare.js"
+import validateShop from "../../utils/shop-validator.js"
+import { Session } from "../session/index.js"
 
 import {
   AccessTokenResponse,
@@ -22,7 +22,7 @@ import {
   AuthValidationResult,
   OnlineAccessInfo,
   OnlineAccessResponse,
-} from "./types"
+} from "./types.js"
 
 const ShopifyOAuth = {
   SESSION_COOKIE_NAME: "shopify_app_session",

@@ -1,4 +1,4 @@
-import { AuthConfig, OnlineAccessInfo } from "../oauth/types"
+import { AuthConfig, OnlineAccessInfo } from "../oauth/types.js"
 
 export interface SessionInterface {
   readonly id: string;

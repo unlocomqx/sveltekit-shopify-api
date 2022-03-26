@@ -1,10 +1,10 @@
 import crypto from "crypto"
 import querystring from "querystring"
 
-import { AuthConfig, AuthQuery } from "../auth/oauth/types"
-import * as ShopifyErrors from "../error"
+import { AuthConfig, AuthQuery } from "../auth/oauth/types.js"
+import * as ShopifyErrors from "../error.js"
 
-import safeCompare from "./safe-compare"
+import safeCompare from "./safe-compare.js"
 
 export function stringifyQuery (query: AuthQuery): string {
   const orderedObj = Object.keys(query)

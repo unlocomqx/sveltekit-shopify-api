@@ -1,6 +1,6 @@
-import { AuthConfig, OnlineAccessInfo } from "../oauth/types"
+import { AuthConfig, OnlineAccessInfo } from "../oauth/types.js"
 
-import { SessionInterface } from "./types"
+import { SessionInterface } from "./types.js"
 
 /**
  * Stores App information from logged in merchants so they can make authenticated requests to the Admin API.

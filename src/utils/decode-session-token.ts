@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken"
-import { AuthConfig } from "../auth/oauth/types"
+import { AuthConfig } from "../auth/oauth/types.js"
 
-import * as ShopifyErrors from "../error"
+import * as ShopifyErrors from "../error.js"
 
-import validateShop from "./shop-validator"
+import validateShop from "./shop-validator.js"
 
 const JWT_PERMITTED_CLOCK_TOLERANCE = 5
 

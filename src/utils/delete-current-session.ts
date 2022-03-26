@@ -1,8 +1,8 @@
 import { RequestEvent } from "@sveltejs/kit/types/private"
-import { ShopifyOAuth } from "../auth/oauth/oauth"
-import { AuthConfig } from "../auth/oauth/types"
+import { ShopifyOAuth } from "../auth/oauth/oauth.js"
+import { AuthConfig } from "../auth/oauth/types.js"
 
-import * as ShopifyErrors from "../error"
+import * as ShopifyErrors from "../error.js"
 
 /**
  * Finds and deletes the current user's session, based on the given request and response
